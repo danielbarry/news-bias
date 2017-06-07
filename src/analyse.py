@@ -1,3 +1,4 @@
+import re
 import sys
 
 # main()
@@ -28,8 +29,18 @@ def main(args) :
       process_version()
     if process_arg == False :
       data = args[x]
+  pos_words = []
+  neg_words = []
   # Check if we have a file
   if len(data) > 0 :
+    # Initialise sentiment analysis
+    if method == "d" :
+      with open("../dat/dictionary-positive.txt") as f :
+        for line in f :
+          pos_words += [line]
+      with open("../dat/dictionary-negative.txt") as f :
+        for line in f :
+          neg_words += [line]
     print("Method\t" + method)
     # Load the file
     with open(data) as f :
@@ -38,10 +49,52 @@ def main(args) :
       for line in f :
         # Process the file
         if method == "d" :
-          print(str(x) + "\t" + str(analyse_dictionary()))
+          print(
+            str(x) +
+            "\t" +
+            str(analyse_dictionary(line, pos_words, neg_words))
+          )
         # Increment our counter
         x += 1
   return
+
+# analyse_dictionary()
+#
+# Analyse the words based on a dictionary lookup.
+#
+# @param sentence The string data to be analysed.
+# @param pos_words Positive word list.
+# @param neg_words Negative word list.
+# @return Minus number if negative, positive number of positive.
+def analyse_dictionary(sentence, pos_words, neg_words) :
+  # Create word list
+  words = sanitize(sentence).split(" ")
+  val = 0
+  # Check each of the words
+  for x in range(0, len(words)) :
+    # Check word against positive list
+    for y in range(0, len(pos_words)) :
+      if words[x] == unicode(pos_words[y], "latin-1") :
+        val += 1
+    # Check word against negative list
+    for y in range(0, len(neg_words)) :
+      if words[x] == unicode(neg_words[y], "latin-1") :
+        val -= 1
+  return val
+
+# sanitize()
+#
+# Sanitize the input string.
+#
+# @param raw The raw input data to be sanitized.
+# @return The sanitized string.
+def sanitize(raw) :
+  raw = unicode(raw, "latin-1")
+  raw = raw.lower()
+  raw = raw.replace("[", " ")
+  raw = raw.replace("]", " ")
+  raw = re.sub("[!@#$%^&*()_+<>./'`{}+=,\"\\:]", " ", raw)
+  return raw
 
 # process_about()
 #
