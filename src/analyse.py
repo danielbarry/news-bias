@@ -22,7 +22,7 @@ def main(args) :
     if args[x] == "-m" or args[x] == "--method" :
       process_arg = True
       x += 1
-      process_method(args[x])
+      method = process_method(args[x])
     if args[x] == "-v" or args[x] == "--version" :
       process_arg = True
       process_version()
