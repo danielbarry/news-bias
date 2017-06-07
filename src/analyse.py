@@ -26,7 +26,7 @@ def main(args) :
     if args[x] == "-v" or args[x] == "--version" :
       process_arg = True
       process_version()
-    if process_arg == True :
+    if process_arg == False :
       data = args[x]
   # Check if we have a file
   if len(data) > 0 :
