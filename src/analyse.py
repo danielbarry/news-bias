@@ -1,5 +1,7 @@
 import re
 import sys
+# Source: https://textblob.readthedocs.io/en/latest/quickstart.html#quickstart
+from textblob import TextBlob
 
 # main()
 #
@@ -53,6 +55,18 @@ def main(args) :
             str(x) +
             "\t" +
             str(analyse_dictionary(line, pos_words, neg_words))
+          )
+        if method == "p" :
+          print(
+            str(x) +
+            "\t" +
+            str(TextBlob(sanitize(line)).sentiment.polarity)
+          )
+        if method == "s" :
+          print(
+            str(x) +
+            "\t" +
+            str(TextBlob(sanitize(line)).sentiment.subjectivity)
           )
         # Increment our counter
         x += 1
@@ -116,6 +130,8 @@ def process_help() :
   print("    -m  --method     Set the program method")
   print("                       <CHAR> The mode to be set")
   print("                         'd' Dictionary matching")
+  print("                         'p' Sentiment polarity")
+  print("                         's' Sentiment subjectivity")
   print("    -v  --version    Display version information")
   print("")
   print("  FILE")
